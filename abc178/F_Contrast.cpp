@@ -186,12 +186,23 @@ int main() {
   // B を reverse してから、a[i] = b[i] になってるところを見つけたらランダムに
   // swap して解消する。これを時間いっぱいやる
   // これで通ったけど、いいのか？！
+  // B の全要素を走査する毎に終了条件のチェックを入れたらめっちゃ速くなった
 
   reverse(all(b));
 
-  while (true) {
+  auto Finish = [&]() -> bool {
     for (int i = 0; i < n; ++i) {
-      if (time.get_elapsed_time() > 1.8) {
+      if (a[i] == b[i]) return false;
+    }
+    return true;
+  };
+
+  while (true) {
+    if (Finish()) {
+      println(b); return 0;
+    }
+    for (int i = 0; i < n; ++i) {
+      if (time.get_elapsed_time() > 1.9) {
         println(b); return 0;
       }
       if (a[i] == b[i]) {
@@ -199,12 +210,12 @@ int main() {
         int p = i;
         while (b[p] == cur) {
           p = dist(rng);
-          if (time.get_elapsed_time() > 1.8) {
+          if (time.get_elapsed_time() > 1.9) {
             println(b); return 0;
           }
         }
         swap(b[i], b[p]);
-        if (time.get_elapsed_time() > 1.8) {
+        if (time.get_elapsed_time() > 1.9) {
           println(b); return 0;
         }
       }
